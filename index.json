@@ -1,22 +1,5 @@
 [
   {
-    "id": "e4381aa5ebdf",
-    "name": "kutaa",
-    "description": "it can blow ur mind",
-    "uploaderName": "DudeTNT",
-    "version": "1.21.11",
-    "loader": "fabric",
-    "mods": [],
-    "shaders": [],
-    "resourcePacks": [],
-    "zipUrl": "https://github.com/cringsimulator-a11y/LauncherProfiles/releases/download/profiles-hub/e4381aa5ebdf.zip",
-    "iconUrl": "",
-    "downloads": 0,
-    "avgRating": 0,
-    "rateCount": 0,
-    "uploadedAt": 1773157836
-  },
-  {
     "id": "d112ae353770",
     "name": "kartik skyblock",
     "description": "",
@@ -48,7 +31,7 @@
     "resourcePacks": [],
     "zipUrl": "https://github.com/cringsimulator-a11y/LauncherProfiles/releases/download/profiles-hub/1359fdb3307a.zip",
     "iconUrl": "",
-    "downloads": 1,
+    "downloads": 2,
     "avgRating": 0,
     "rateCount": 0,
     "uploadedAt": 1773131385

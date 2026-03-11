@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Exo 2','Segoe UI',sans-serif; background:#0d0f14; color:#e8eaf0; padding:32px 40px; font-size:14px; line-height:1.7; }
+  .tag { display:inline-block; background:rgba(74,158,255,.15); color:#4a9eff; font-size:10px; font-weight:700; padding:3px 10px; border-radius:5px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:12px; }
+  h1 { font-family:'Rajdhani','Segoe UI',sans-serif; font-size:26px; font-weight:700; color:#fff; margin-bottom:6px; }
+  .date { font-size:11px; color:#5a6080; margin-bottom:24px; }
+  h2 { font-family:'Rajdhani','Segoe UI',sans-serif; font-size:16px; font-weight:700; color:#ff8c2a; margin:24px 0 8px; text-transform:uppercase; }
+  p { color:#c0c4d4; margin-bottom:14px; }
+  ul { padding-left:20px; color:#c0c4d4; margin-bottom:14px; }
+  ul li { margin-bottom:5px; }
+</style>
+</head>
+<body>
+<div class="tag">Update</div>
+<h1>March Update — Bug Fixes & Java 21 Support</h1>
+<div class="date">March 5, 2025</div>
+<p>This month's update brings important stability improvements and full Java 21 support for all Minecraft 1.21+ versions.</p>
+<h2>Bug Fixes</h2>
+<ul>
+  <li>Fixed crash when launching Fabric with custom Java path</li>
+  <li>Fixed profile stash folders appearing in the profiles list</li>
+  <li>Fixed version picker username field showing for MSA accounts</li>
+  <li>Fixed news feed not refreshing after first load</li>
+</ul>
+<h2>Improvements</h2>
+<ul>
+  <li>Microsoft tokens are now saved permanently using refresh tokens</li>
+  <li>RAM allocation now correctly reads from launcher_data.json per profile</li>
+  <li>Version detection is now based on folder name (more reliable)</li>
+</ul>
+</body>
+</html>

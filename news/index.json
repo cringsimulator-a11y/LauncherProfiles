@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Sonar Client 1.0 Released!",
+    "date":  "2025-03-11",
+    "tag":   "release",
+    "image": "release-1.0-thumb.png",
+    "file":  "release-1.0.html"
+  },
+  {
+    "title": "March Update — Bug Fixes & Java 21 Support",
+    "date":  "2025-03-05",
+    "tag":   "update",
+    "image": "march-update-thumb.png",
+    "file":  "march-update.html"
+  },
+  {
+    "title": "Critical Hotfix: Fabric Login Fix",
+    "date":  "2025-02-28",
+    "tag":   "hotfix",
+    "image": "",
+    "file":  "hotfix-fabric.html"
+  }
+]

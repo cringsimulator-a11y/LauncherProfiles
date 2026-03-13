@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Launcher — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-darkest: #0d0f14;
+    --bg-dark: #13161e;
+    --bg-mid: #181c26;
+    --bg-panel: #1c2030;
+    --bg-card: #1f2435;
+    --bg-hover: #252a3a;
+    --border: #2a2f42;
+    --border-light: #333a52;
+    --accent-green: #4caf50;
+    --accent-green-bright: #5dcc62;
+    --accent-blue: #4a9eff;
+    --text-primary: #e8eaf0;
+    --text-secondary: #8a90a8;
+    --text-dim: #5a6080;
+  }
+
+  body {
+    font-family: 'Exo 2', sans-serif;
+    background: var(--bg-darkest);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    padding: 20px 0;
+  }
+
+  /* Animated background */
+  .bg-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .bg-scene canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Floating blocks */
+  .bg-blocks {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .bg-block {
+    position: absolute;
+    border-radius: 4px;
+    opacity: 0.06;
+    animation: driftBlock linear infinite;
+  }
+
+  @keyframes driftBlock {
+    0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    5%   { opacity: 0.06; }
+    95%  { opacity: 0.06; }
+    100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Stars */
+  .stars {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 5% 8%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 35%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.2px 1.2px at 25% 62%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 38% 18%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 52% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 65% 42%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 78% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 88% 70%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.2px 1.2px at 92% 30%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 42% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 10% 90%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 72% 88%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.2px 1.2px at 55% 5%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 95%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.4) 0%, transparent 100%);
+  }
+
+  /* Glow blobs */
+  .glow-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .blob-blue  { width: 500px; height: 500px; background: rgba(74,158,255,0.07); top: -100px; right: -100px; }
+  .blob-green { width: 400px; height: 400px; background: rgba(76,175,80,0.06);  bottom: -80px; left: -80px; }
+
+  /* CARD */
+  .card-wrap {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 440px;
+    padding: 20px;
+    animation: cardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(24px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Logo area */
+  .logo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .logo-icon {
+    width: 60px; height: 60px;
+    border-radius: 16px;
+    background: var(--bg-panel);
+    border: 1.5px solid var(--border-light);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 30px rgba(74,158,255,0.15);
+  }
+
+  .logo-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .logo-sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+  }
+
+  /* Card */
+  .card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+
+  .card-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+  }
+
+  /* Form */
+  .form-group {
+    margin-bottom: 12px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 7px;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+
+  .input-wrap svg {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    pointer-events: none;
+    transition: color 0.15s;
+  }
+
+  .form-input {
+    width: 100%;
+    height: 44px;
+    background: var(--bg-mid);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0 14px 0 40px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .form-input::placeholder { color: var(--text-dim); }
+  .form-input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(74,158,255,0.1); }
+  .form-input:focus + svg, .input-wrap:focus-within svg { color: var(--accent-blue); }
+
+  /* Eye toggle */
+  .eye-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-dim);
+    padding: 4px;
+    transition: color 0.15s;
+  }
+  .eye-toggle:hover { color: var(--text-secondary); }
+
+  /* Forgot */
+  .form-footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: -4px;
+    margin-bottom: 14px;
+  }
+
+  .forgot-link {
+    font-size: 11px;
+    color: var(--accent-blue);
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+    text-decoration: none;
+  }
+  .forgot-link:hover { opacity: 1; }
+
+  /* Submit btn */
+  .btn-primary {
+    width: 100%;
+    height: 48px;
+    background: var(--accent-green);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 4px 16px rgba(76,175,80,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-primary:hover { background: var(--accent-green-bright); box-shadow: 0 4px 24px rgba(76,175,80,0.5); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* Spinner */
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 22px 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-text { font-size: 11px; color: var(--text-dim); white-space: nowrap; }
+
+  /* Signup link */
+  .signup-row {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 20px;
+  }
+  .signup-row a {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.15s;
+  }
+  .signup-row a:hover { opacity: 0.8; }
+
+  /* Alert */
+  .alert {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    margin-bottom: 18px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+  }
+  .alert.error   { background: rgba(224,80,80,0.12); border: 1px solid rgba(224,80,80,0.3); color: #f08080; }
+  .alert.success { background: rgba(76,175,80,0.12); border: 1px solid rgba(76,175,80,0.3);  color: #80cc80; }
+  .alert.show { display: flex; }
+
+  .divider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 14px;
+  }
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .btn-microsoft {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.18s, border-color 0.18s, transform 0.1s;
+    margin-bottom: 12px;
+  }
+  .btn-microsoft:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: #4a9eff66;
+    transform: translateY(-1px);
+  }
+  .btn-microsoft:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* ── FREE / CRACKED NOTICE ── */
+  .free-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: rgba(74,158,255,0.07);
+    border: 1px solid rgba(74,158,255,0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  .free-notice svg { flex-shrink:0; color:var(--accent-blue); margin-top:1px; }
+  .free-notice strong { color: var(--accent-blue); }
+
+  /* ── BACK ROW ── */
+  .back-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin-bottom: 20px;
+    width: fit-content;
+    transition: color 0.15s;
+  }
+  .back-row:hover { color: var(--accent-blue); }
+
+  /* ── 6-BOX CODE INPUT ── */
+  .code-inputs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 8px 0 22px;
+  }
+  .code-box {
+    width: 46px;
+    height: 54px;
+    background: var(--bg-mid);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    caret-color: var(--accent-blue);
+  }
+  .code-box:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(74,158,255,0.12);
+  }
+  .code-box.filled { border-color: rgba(76,175,80,0.5); }
+  .code-box.error  { border-color: rgba(224,80,80,0.6); animation: shake 0.3s ease; }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px)}
+    40%{transform:translateX(4px)}   60%{transform:translateX(-3px)}
+    80%{transform:translateX(3px)}
+  }
+
+  /* ── SUCCESS ICON ── */
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(76,175,80,0.12);
+    border: 2px solid rgba(76,175,80,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: var(--accent-green);
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-scene">
+  <div class="stars"></div>
+  <div class="glow-blob blob-blue"></div>
+  <div class="glow-blob blob-green"></div>
+  <div class="bg-blocks" id="bgBlocks"></div>
+</div>
+
+<!-- Card -->
+<div class="card-wrap">
+  <div class="logo-area">
+    <div class="logo-icon">
+      <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="18" fill="#1e2640" stroke="#3a4060" stroke-width="1.5"/>
+        <path d="M10 20 Q20 8 30 20 Q20 32 10 20Z" fill="#4a9eff" opacity="0.9"/>
+        <circle cx="20" cy="20" r="5" fill="#fff" opacity="0.95"/>
+      </svg>
+    </div>
+    <div class="logo-title">Launcher</div>
+    <div class="logo-sub">Minecraft Modpack Launcher</div>
+  </div>
+
+  <div class="card" id="cardLogin">
+    <div class="card-title">Welcome back</div>
+    <div class="card-subtitle">Sign in to your account to continue</div>
+
+    <div class="alert error" id="alertBox">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="alertMsg"></span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <div class="input-wrap">
+        <input class="form-input" id="username" type="text" placeholder="Enter your username" autocomplete="username"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="left:13px;top:50%;position:absolute;transform:translateY(-50%);pointer-events:none;color:var(--text-dim);">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <div class="input-wrap">
+        <input class="form-input" id="password" type="password" placeholder="Enter your password" autocomplete="current-password" style="padding-right:44px;"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="left:13px;top:50%;position:absolute;transform:translateY(-50%);pointer-events:none;color:var(--text-dim);">
+          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+        <button class="eye-toggle" type="button" onclick="togglePw('password', this)" tabindex="-1">
+          <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="form-footer-row">
+      <span class="forgot-link" onclick="showForgot()">Forgot password?</span>
+    </div>
+
+    <button class="btn-primary" id="loginBtn" onclick="handleLogin()">
+      <div class="spinner" id="loginSpinner"></div>
+      <span id="loginBtnText">Sign In</span>
+    </button>
+
+    <div class="divider-row">
+      <span class="divider-line"></span>
+      <span class="divider-text">or</span>
+      <span class="divider-line"></span>
+    </div>
+
+    <button class="btn-microsoft" id="msBtn" onclick="handleMicrosoftLogin()">
+      <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+        <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+        <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+      </svg>
+      <span id="msBtnText">Sign in with Microsoft</span>
+      <div class="spinner" id="msSpinner"></div>
+    </button>
+
+    <!-- FREE / CRACKED NOTICE -->
+    <div class="free-notice">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>No Microsoft account? <strong>This launcher is completely free.</strong> Just create an account above — you can play in offline / cracked mode without owning Minecraft.</span>
+    </div>
+
+    <div class="signup-row">
+      Don't have an account? <a href="signup.html">Create one</a>
+    </div>
+  </div><!-- /card login -->
+
+  <!-- ══════════════════════════════════════════
+       FORGOT PASSWORD — STEP 1: Enter username
+  ══════════════════════════════════════════ -->
+  <div class="card" id="cardForgot1" style="display:none;">
+    <div class="back-row" onclick="showLogin()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Sign In
+    </div>
+    <div class="card-title">Reset Password</div>
+    <div class="card-subtitle">Enter your username and we'll email you a reset code.</div>
+
+    <div class="alert error" id="forgot1Alert">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="forgot1AlertMsg"></span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <div class="input-wrap">
+        <input class="form-input" id="forgotUsername" type="text" placeholder="Your username" autocomplete="off"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="left:13px;top:50%;position:absolute;transform:translateY(-50%);pointer-events:none;color:var(--text-dim);"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="forgot1Btn" onclick="handleForgotStep1()">
+      <div class="spinner" id="forgot1Spinner"></div>
+      <span id="forgot1BtnText">Send Reset Code</span>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FORGOT PASSWORD — STEP 2: Enter code
+  ══════════════════════════════════════════ -->
+  <div class="card" id="cardForgot2" style="display:none;">
+    <div class="back-row" onclick="showForgot()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </div>
+    <div class="card-title">Enter Code</div>
+    <div class="card-subtitle" id="forgot2Sub">Check your email for a 6-digit code.</div>
+
+    <div class="alert error" id="forgot2Alert">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="forgot2AlertMsg"></span>
+    </div>
+
+    <!-- 6-digit code input boxes -->
+    <div class="code-inputs" id="codeInputs">
+      <input class="code-box" id="c0" maxlength="1" type="text" inputmode="numeric" oninput="codeInput(0)" onkeydown="codeKey(event,0)"/>
+      <input class="code-box" id="c1" maxlength="1" type="text" inputmode="numeric" oninput="codeInput(1)" onkeydown="codeKey(event,1)"/>
+      <input class="code-box" id="c2" maxlength="1" type="text" inputmode="numeric" oninput="codeInput(2)" onkeydown="codeKey(event,2)"/>
+      <input class="code-box" id="c3" maxlength="1" type="text" inputmode="numeric" oninput="codeInput(3)" onkeydown="codeKey(event,3)"/>
+      <input class="code-box" id="c4" maxlength="1" type="text" inputmode="numeric" oninput="codeInput(4)" onkeydown="codeKey(event,4)"/>
+      <input class="code-box" id="c5" maxlength="1" type="text" inputmode="numeric" oninput="codeInput(5)" onkeydown="codeKey(event,5)"/>
+    </div>
+
+    <button class="btn-primary" id="forgot2Btn" onclick="handleForgotStep2()">
+      <div class="spinner" id="forgot2Spinner"></div>
+      <span id="forgot2BtnText">Verify Code</span>
+    </button>
+
+    <div style="text-align:center;margin-top:14px;">
+      <span class="forgot-link" onclick="handleForgotStep1(true)" id="resendLink">Resend code</span>
+      <span id="resendTimer" style="font-size:11px;color:var(--text-dim);display:none;"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FORGOT PASSWORD — STEP 3: New password
+  ══════════════════════════════════════════ -->
+  <div class="card" id="cardForgot3" style="display:none;">
+    <div class="card-title">New Password</div>
+    <div class="card-subtitle">Choose a new password for your account.</div>
+
+    <div class="alert error" id="forgot3Alert">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="forgot3AlertMsg"></span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">New Password</label>
+      <div class="input-wrap">
+        <input class="form-input" id="newPassword" type="password" placeholder="Min. 6 characters" style="padding-right:44px;"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="left:13px;top:50%;position:absolute;transform:translateY(-50%);pointer-events:none;color:var(--text-dim);"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <button class="eye-toggle" type="button" onclick="togglePw('newPassword',this)" tabindex="-1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Confirm Password</label>
+      <div class="input-wrap">
+        <input class="form-input" id="confirmNewPassword" type="password" placeholder="Repeat new password" style="padding-right:44px;"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="left:13px;top:50%;position:absolute;transform:translateY(-50%);pointer-events:none;color:var(--text-dim);"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <button class="eye-toggle" type="button" onclick="togglePw('confirmNewPassword',this)" tabindex="-1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="forgot3Btn" onclick="handleForgotStep3()">
+      <div class="spinner" id="forgot3Spinner"></div>
+      <span id="forgot3BtnText">Save New Password</span>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FORGOT PASSWORD — STEP 4: Success
+  ══════════════════════════════════════════ -->
+  <div class="card" id="cardForgotDone" style="display:none;">
+    <div style="text-align:center;padding:12px 0 20px;">
+      <div class="success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="card-title" style="margin-top:16px;margin-bottom:6px;">Password Updated!</div>
+      <div class="card-subtitle" style="margin-bottom:28px;">Your password has been changed successfully.</div>
+      <button class="btn-primary" onclick="showLogin()">Back to Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDrfqJBYomo0psMToQmR5rBKz56B76UIac",
+    authDomain: "launcher-c813d.firebaseapp.com",
+    projectId: "launcher-c813d",
+    storageBucket: "launcher-c813d.firebasestorage.app",
+    messagingSenderId: "71513819000",
+    appId: "1:71513819000:web:43bbcf97745c459ae42a8d",
+    measurementId: "G-RLH09R9NRE",
+    databaseURL: "https://launcher-c813d-default-rtdb.europe-west1.firebasedatabase.app"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getDatabase(app);
+
+  // In-memory reset state (lives only in this tab, never persisted)
+  let _resetUsername  = '';
+  let _resetCode      = '';
+  let _resetCodeExp   = 0;      // timestamp ms
+  let _resendTimeout  = null;
+
+  // ════════════════════════════════════════════════════════
+  // VIEW SWITCHERS
+  // ════════════════════════════════════════════════════════
+
+  const CARDS = ['cardLogin','cardForgot1','cardForgot2','cardForgot3','cardForgotDone'];
+
+  function showCard(id) {
+    CARDS.forEach(c => {
+      const el = document.getElementById(c);
+      if (el) el.style.display = (c === id) ? '' : 'none';
+    });
+  }
+
+  window.showLogin  = () => { clearAlerts(); showCard('cardLogin'); };
+  window.showForgot = () => { clearAlerts(); showCard('cardForgot1'); };
+
+  function clearAlerts() {
+    ['alertBox','forgot1Alert','forgot2Alert','forgot3Alert'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('show');
+    });
+  }
+
+  function showAlert(cardN, msg) {
+    const map = { login:'alertBox', f1:'forgot1Alert', f2:'forgot2Alert', f3:'forgot3Alert' };
+    const el  = document.getElementById(map[cardN]);
+    if (!el) return;
+    el.querySelector('span').textContent = msg;
+    el.classList.add('show');
+  }
+
+  // ════════════════════════════════════════════════════════
+  // NORMAL LOGIN
+  // ════════════════════════════════════════════════════════
+
+  window.handleLogin = async function() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const btn      = document.getElementById('loginBtn');
+    const spinner  = document.getElementById('loginSpinner');
+    const btnText  = document.getElementById('loginBtnText');
+
+    document.getElementById('alertBox').classList.remove('show');
+
+    if (!username || !password) {
+      showAlert('login', 'Please fill in all fields.');
+      return;
+    }
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnText.textContent = 'Signing in...';
+
+    try {
+      const snap = await get(ref(db, `Users/${username}`));
+
+      if (!snap.exists()) {
+        showAlert('login', 'No account found with that username.');
+        return;
+      }
+
+      const data = snap.val();
+      if (data.Password !== password) {
+        showAlert('login', 'Incorrect password. Please try again.');
+        return;
+      }
+
+      localStorage.setItem('launcher_user', username);
+      sessionStorage.setItem('launcher_user', username);
+
+      if (window.pywebview?.api?.save_login_credentials) {
+        try { await window.pywebview.api.save_login_credentials(username, password); } catch(_) {}
+      }
+
+      btnText.textContent = 'Success!';
+      btn.style.background = 'var(--accent-blue)';
+      setTimeout(() => { window.location.href = 'launcher.html'; }, 700);
+
+    } catch (err) {
+      console.error(err);
+      showAlert('login', 'Connection error. Please try again.');
+    } finally {
+      if (btn.disabled && btnText.textContent !== 'Success!') {
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.textContent = 'Sign In';
+      }
+    }
+  };
+
+  // ════════════════════════════════════════════════════════
+  // FORGOT PASSWORD — STEP 1: look up user, send email
+  // ════════════════════════════════════════════════════════
+
+  window.handleForgotStep1 = async function(isResend = false) {
+    const username = document.getElementById('forgotUsername').value.trim();
+    const btn      = document.getElementById('forgot1Btn');
+    const spinner  = document.getElementById('forgot1Spinner');
+    const btnText  = document.getElementById('forgot1BtnText');
+
+    document.getElementById('forgot1Alert').classList.remove('show');
+
+    if (!username) {
+      showAlert('f1', 'Please enter your username.');
+      return;
+    }
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnText.textContent = 'Looking up account...';
+
+    try {
+      const snap = await get(ref(db, `Users/${username}`));
+
+      if (!snap.exists()) {
+        showAlert('f1', 'No account found with that username.');
+        return;
+      }
+
+      const userData = snap.val();
+
+      // MSA accounts don't have a normal password — can't reset
+      if (userData.Password === '__MSA__') {
+        showAlert('f1', 'This account uses Microsoft sign-in. Reset your password through Microsoft instead.');
+        return;
+      }
+
+      const email = userData.email || userData.Email || '';
+      if (!email) {
+        showAlert('f1', 'No email address is linked to this account. Add one in Settings after signing in, or contact support.');
+        return;
+      }
+
+      // Generate a fresh 6-digit code
+      _resetCode     = String(Math.floor(100000 + Math.random() * 900000));
+      _resetCodeExp  = Date.now() + 15 * 60 * 1000; // 15 minutes
+      _resetUsername = username;
+
+      btnText.textContent = 'Sending email...';
+
+      // Format expiry time string for the template {{time}} variable
+      const expTime = new Date(Date.now() + 15 * 60 * 1000);
+      const timeStr = expTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Send via EmailJS
+      emailjs.init({ publicKey: 'cC0r1wJRI8WilbKmE' });
+
+      const ejsResult = await emailjs.send('service_qiaehou', 'template_fsnwz3r', {
+        email:    email,       // who to send to — must match your template's "To Email" field
+        passcode: _resetCode,  // {{passcode}} in template
+        time:     timeStr,     // {{time}} in template
+      });
+
+      if (ejsResult.status !== 200) {
+        showAlert('f1', 'Failed to send email. Please try again.');
+        return;
+      }
+
+      // Move to step 2
+      const maskedEmail = maskEmail(email);
+      document.getElementById('forgot2Sub').textContent =
+        `We sent a 6-digit code to ${maskedEmail}. It expires in 15 minutes.`;
+
+      // Clear code boxes
+      for (let i = 0; i < 6; i++) {
+        const b = document.getElementById('c' + i);
+        b.value = '';
+        b.className = 'code-box';
+      }
+
+      showCard('cardForgot2');
+      document.getElementById('c0').focus();
+      startResendTimer();
+
+    } catch (err) {
+      console.error('[ForgotPw] Step 1 error:', err);
+      showAlert('f1', 'Failed to send reset email. Check your connection and try again.');
+    } finally {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Send Reset Code';
+    }
+  };
+
+  // ════════════════════════════════════════════════════════
+  // FORGOT PASSWORD — STEP 2: verify code
+  // ════════════════════════════════════════════════════════
+
+  window.handleForgotStep2 = function() {
+    const entered = [0,1,2,3,4,5].map(i => document.getElementById('c'+i).value).join('');
+
+    document.getElementById('forgot2Alert').classList.remove('show');
+
+    if (entered.length < 6) {
+      showAlert('f2', 'Enter all 6 digits.');
+      return;
+    }
+
+    if (Date.now() > _resetCodeExp) {
+      showAlert('f2', 'This code has expired. Request a new one.');
+      for (let i = 0; i < 6; i++) {
+        const b = document.getElementById('c'+i);
+        b.classList.add('error');
+        setTimeout(() => b.classList.remove('error'), 500);
+      }
+      return;
+    }
+
+    if (entered !== _resetCode) {
+      showAlert('f2', 'Incorrect code. Please try again.');
+      for (let i = 0; i < 6; i++) {
+        const b = document.getElementById('c'+i);
+        b.classList.add('error');
+        setTimeout(() => b.classList.remove('error'), 500);
+      }
+      // Clear boxes on wrong code
+      for (let i = 0; i < 6; i++) document.getElementById('c'+i).value = '';
+      document.getElementById('c0').focus();
+      return;
+    }
+
+    // Code correct — move to step 3
+    clearTimeout(_resendTimeout);
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmNewPassword').value = '';
+    showCard('cardForgot3');
+    document.getElementById('newPassword').focus();
+  };
+
+  // ════════════════════════════════════════════════════════
+  // FORGOT PASSWORD — STEP 3: save new password
+  // ════════════════════════════════════════════════════════
+
+  window.handleForgotStep3 = async function() {
+    const pw  = document.getElementById('newPassword').value;
+    const cpw = document.getElementById('confirmNewPassword').value;
+    const btn     = document.getElementById('forgot3Btn');
+    const spinner = document.getElementById('forgot3Spinner');
+    const btnText = document.getElementById('forgot3BtnText');
+
+    document.getElementById('forgot3Alert').classList.remove('show');
+
+    if (!pw) { showAlert('f3', 'Please enter a new password.'); return; }
+    if (pw.length < 6) { showAlert('f3', 'Password must be at least 6 characters.'); return; }
+    if (pw !== cpw)    { showAlert('f3', 'Passwords do not match.'); return; }
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnText.textContent = 'Saving...';
+
+    try {
+      await update(ref(db, `Users/${_resetUsername}`), { Password: pw });
+      // Invalidate code
+      _resetCode    = '';
+      _resetCodeExp = 0;
+      showCard('cardForgotDone');
+    } catch (err) {
+      console.error('[ForgotPw] Step 3 error:', err);
+      showAlert('f3', 'Failed to update password. Check your connection.');
+    } finally {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Save New Password';
+    }
+  };
+
+  // ════════════════════════════════════════════════════════
+  // CODE INPUT BOX HELPERS
+  // ════════════════════════════════════════════════════════
+
+  window.codeInput = function(i) {
+    const el = document.getElementById('c' + i);
+    // Strip non-digits
+    el.value = el.value.replace(/\D/g, '').slice(0, 1);
+    if (el.value) {
+      el.classList.add('filled');
+      if (i < 5) document.getElementById('c' + (i + 1)).focus();
+      // Auto-verify when all 6 filled
+      const full = [0,1,2,3,4,5].every(n => document.getElementById('c'+n).value);
+      if (full) handleForgotStep2();
+    } else {
+      el.classList.remove('filled');
+    }
+  };
+
+  window.codeKey = function(e, i) {
+    if (e.key === 'Backspace' && !document.getElementById('c'+i).value && i > 0) {
+      document.getElementById('c' + (i - 1)).focus();
+    }
+    if (e.key === 'ArrowLeft'  && i > 0) document.getElementById('c' + (i - 1)).focus();
+    if (e.key === 'ArrowRight' && i < 5) document.getElementById('c' + (i + 1)).focus();
+  };
+
+  // ════════════════════════════════════════════════════════
+  // RESEND TIMER
+  // ════════════════════════════════════════════════════════
+
+  function startResendTimer() {
+    const link  = document.getElementById('resendLink');
+    const timer = document.getElementById('resendTimer');
+    let secs = 60;
+
+    link.style.display  = 'none';
+    timer.style.display = '';
+
+    clearTimeout(_resendTimeout);
+
+    function tick() {
+      timer.textContent = `Resend in ${secs}s`;
+      if (secs <= 0) {
+        timer.style.display = 'none';
+        link.style.display  = '';
+        return;
+      }
+      secs--;
+      _resendTimeout = setTimeout(tick, 1000);
+    }
+    tick();
+  }
+
+  // ════════════════════════════════════════════════════════
+  // UTILS
+  // ════════════════════════════════════════════════════════
+
+  function maskEmail(email) {
+    const [local, domain] = email.split('@');
+    if (!domain) return email;
+    const visible = local.length <= 2 ? local[0] : local.slice(0, 2);
+    return visible + '***@' + domain;
+  }
+
+  window.togglePw = function(id, btn) {
+    const inp = document.getElementById(id);
+    const isHidden = inp.type === 'password';
+    inp.type = isHidden ? 'text' : 'password';
+    btn.innerHTML = isHidden
+      ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+      : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+  };
+
+  // Enter key on login form
+  document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+  document.getElementById('username').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('password').focus(); });
+  document.getElementById('forgotUsername').addEventListener('keydown', e => { if (e.key === 'Enter') handleForgotStep1(); });
+
+  // ════════════════════════════════════════════════════════
+  // MICROSOFT LOGIN (unchanged)
+  // ════════════════════════════════════════════════════════
+  window.handleMicrosoftLogin = async function() {
+    const btn     = document.getElementById('msBtn');
+    const btnText = document.getElementById('msBtnText');
+    const spinner = document.getElementById('msSpinner');
+
+    btn.disabled = true;
+    btnText.textContent = 'Opening Microsoft sign-in…';
+    spinner.style.display = 'block';
+    document.getElementById('alertBox').classList.remove('show');
+
+    try {
+      if (!window.pywebview) {
+        showAlert('login', 'pywebview API not available. Make sure you are running inside the launcher.');
+        return;
+      }
+      const res = JSON.parse(await window.pywebview.api.microsoft_login());
+      if (!res.ok) {
+        showAlert('login', res.error || 'Microsoft sign-in failed.');
+        return;
+      }
+
+      try {
+        const { initializeApp }  = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js");
+        const { getDatabase, ref: fbRef, get: fbGet, set, update: fbUpdate } = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js");
+        const app2 = initializeApp(firebaseConfig, "msa-login-" + Date.now());
+        const db2  = getDatabase(app2);
+        const now  = new Date().toISOString();
+        const snap = await fbGet(fbRef(db2, `Users/${res.username}`));
+        if (!snap.exists()) {
+          await set(fbRef(db2, `Users/${res.username}`), {
+            Username: res.username, Password: "__MSA__", UUID: res.uuid,
+            AuthType: "msa", SkinURL: `https://api.dicebear.com/9.x/adventurer/svg?seed=${res.username}`,
+            Status: "Online", Lastseen: now, Chat: {}, Friends: {}
+          });
+        } else {
+          await fbUpdate(fbRef(db2, `Users/${res.username}`), { Lastseen: now, Status: "Online" });
+        }
+      } catch (fbErr) { console.warn("Firebase MSA save failed:", fbErr); }
+
+      localStorage.setItem('launcher_user', res.username);
+      sessionStorage.setItem('launcher_user', res.username);
+      localStorage.setItem('launcher_auth_type', 'msa');
+
+      if (window.pywebview?.api?.save_login_credentials) {
+        try { await window.pywebview.api.save_login_credentials(res.username, '__MSA__'); } catch(_) {}
+      }
+
+      btnText.textContent = `Welcome, ${res.username}!`;
+      btn.style.borderColor = 'var(--accent-green)';
+      spinner.style.display = 'none';
+      setTimeout(() => { window.location.href = 'launcher.html'; }, 800);
+
+    } catch (err) {
+      console.error(err);
+      showAlert('login', 'Unexpected error during Microsoft sign-in.');
+    } finally {
+      if (btn.disabled && !btnText.textContent.startsWith('Welcome')) {
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.textContent = 'Sign in with Microsoft';
+        btn.style.borderColor = '';
+      }
+    }
+  };
+</script>
+
+<!-- Floating blocks animation -->
+<script>
+  const container = document.getElementById('bgBlocks');
+  const colors = ['#4a9eff','#4caf50','#ff8c2a','#cc80ff','#40e0ff'];
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    el.className = 'bg-block';
+    const size = 20 + Math.random() * 60;
+    el.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${12 + Math.random()*20}s;
+      animation-delay:${-Math.random()*25}s;
+      border-radius:${Math.random() > 0.5 ? '4px' : '50%'};
+    `;
+    container.appendChild(el);
+  }
+</script>
+</body>
+</html>

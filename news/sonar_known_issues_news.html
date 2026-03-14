@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Exo 2','Segoe UI',sans-serif; background:#0d0f14; color:#e8eaf0; padding:32px 40px; font-size:14px; line-height:1.7; }
+  .tag { display:inline-block; background:rgba(255,170,0,.13); color:#ffaa00; font-size:10px; font-weight:700; padding:3px 10px; border-radius:5px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:12px; }
+  h1 { font-family:'Rajdhani','Segoe UI',sans-serif; font-size:26px; font-weight:700; color:#fff; margin-bottom:6px; }
+  .date { font-size:11px; color:#5a6080; margin-bottom:24px; }
+  p { color:#c0c4d4; margin-bottom:14px; }
+  h2 { font-family:'Rajdhani','Segoe UI',sans-serif; font-size:17px; font-weight:700; letter-spacing:.06em; color:#4a9eff; margin:24px 0 12px; text-transform:uppercase; }
+  .issue { display:flex; align-items:flex-start; gap:14px; background:#12151f; border:1px solid #1e2235; border-radius:10px; padding:14px 18px; margin-bottom:10px; }
+  .issue-icon { font-size:18px; margin-top:2px; flex-shrink:0; }
+  .issue-body { flex:1; }
+  .issue-title { font-weight:700; font-size:14px; color:#e8eaf0; margin-bottom:3px; display:flex; align-items:center; gap:8px; }
+  .issue-desc { font-size:13px; color:#7a80a0; line-height:1.5; margin:0; }
+  .badge { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; text-transform:uppercase; letter-spacing:.06em; vertical-align:middle; }
+  .badge-broken { background:rgba(224,80,80,.15); color:#e05050; }
+  .badge-wip { background:rgba(255,170,0,.13); color:#ffaa00; }
+  .badge-fixed { background:rgba(76,175,80,.15); color:#4caf50; }
+  .note { background:rgba(255,170,0,.06); border-left:3px solid #ffaa00; border-radius:0 8px 8px 0; padding:14px 18px; margin:20px 0; color:#e0c070; font-size:13px; }
+</style>
+</head>
+<body>
+
+<div class="tag">Known Issues</div>
+<h1>Known Issues &amp; Status</h1>
+<div class="date">March 11, 2025</div>
+
+<p>Below is a list of currently known issues in Sonar Client. We're actively working on fixes — check back for updates.</p>
+
+<div class="note">
+  ⚠️ <strong>Note:</strong> Some features may be temporarily unavailable. We appreciate your patience while we resolve these issues.
+</div>
+
+<h2>Current Issues</h2>
+
+<div class="issue">
+  <div class="issue-icon">📦</div>
+  <div class="issue-body">
+    <div class="issue-title">Fabric Not Downloading <span class="badge badge-broken">Broken</span></div>
+    <p class="issue-desc">Fabric loader fails to download during installation. As a workaround, manually place your Fabric version in <code style="background:#1c2030;color:#cc80ff;padding:2px 6px;border-radius:4px;font-size:12px;">.minecraft/versions</code> until a fix is released.</p>
+  </div>
+</div>
+
+<div class="issue">
+  <div class="issue-icon">☕</div>
+  <div class="issue-body">
+    <div class="issue-title">Java Download Problems <span class="badge badge-broken">Broken</span></div>
+    <p class="issue-desc">Auto-installation of Java 21 may fail on certain systems. If you encounter this, please install Java 21 manually from the official site and point Sonar Client to your Java path in settings.</p>
+  </div>
+</div>
+
+<div class="issue">
+  <div class="issue-icon">👥</div>
+  <div class="issue-body">
+    <div class="issue-title">Profiles Hub Not Working <span class="badge badge-broken">Broken</span></div>
+    <p class="issue-desc">The Profiles Hub is currently non-functional. Creating, sharing, and loading community profiles is unavailable. Local profiles are unaffected.</p>
+  </div>
+</div>
+
+<div class="issue">
+  <div class="issue-icon">🚀</div>
+  <div class="issue-body">
+    <div class="issue-title">Premium Launcher Not Working <span class="badge badge-wip">In Progress</span></div>
+    <p class="issue-desc">The Premium Launcher experience is currently under active development. Some premium features may not function as expected. This is a known limitation and will be resolved in an upcoming update.</p>
+  </div>
+</div>
+
+<div class="issue">
+  <div class="issue-icon">✅</div>
+  <div class="issue-body">
+    <div class="issue-title">Login <span class="badge badge-fixed">Fixed</span></div>
+    <p class="issue-desc">Microsoft Account login is now working correctly. OAuth and refresh tokens are fully operational. If you were previously affected by login failures, please try again — no action needed on your end.</p>
+  </div>
+</div>
+
+<p style="margin-top:32px;color:#5a6080;font-size:12px;">Last updated March 11, 2025 · More fixes on the way. Thank you for your patience! 🎉</p>
+
+</body>
+</html>

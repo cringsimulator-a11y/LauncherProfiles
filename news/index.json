@@ -19,5 +19,12 @@
     "tag":   "hotfix",
     "image": "",
     "file":  "hotfix-fabric.html"
+  },
+  {
+    "title": "Known Issues & Status",
+    "date":  "2025-03-11",
+    "tag":   "issues",
+    "image": "",
+    "file":  "known-issues.html"
   }
 ]

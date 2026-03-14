@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Exo 2','Segoe UI',sans-serif;background:#0d0f14;color:#e8eaf0;padding:32px 40px;font-size:14px;line-height:1.7;}
+  .tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+  .tag-upcoming{background:rgba(124,111,224,.18);color:#a89ff0;}
+  h1{font-family:'Rajdhani','Segoe UI',sans-serif;font-size:28px;font-weight:700;color:#fff;margin-bottom:6px;letter-spacing:.03em;}
+  .date{font-size:11px;color:#5a6080;margin-bottom:24px;}
+  p{color:#c0c4d4;margin-bottom:14px;}
+  h2{font-family:'Rajdhani','Segoe UI',sans-serif;font-size:17px;font-weight:700;letter-spacing:.06em;color:#4a9eff;margin:28px 0 10px;text-transform:uppercase;}
+  .hero-banner{width:100%;background:#0e1020;border:1px solid #1e2235;border-radius:12px;padding:28px 32px;margin-bottom:28px;display:flex;align-items:center;gap:24px;}
+  .hero-icon{font-size:48px;flex-shrink:0;}
+  .hero-text h2{margin:0 0 6px;font-size:20px;color:#a89ff0;text-transform:none;letter-spacing:.02em;}
+  .hero-text p{margin:0;color:#8892b0;font-size:13px;}
+  .feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+  .feature-card{background:#12151f;border:1px solid #1e2235;border-radius:10px;padding:16px 18px;}
+  .feature-card .fc-icon{font-size:20px;margin-bottom:8px;}
+  .feature-card .fc-title{font-weight:700;font-size:13px;color:#e8eaf0;margin-bottom:4px;}
+  .feature-card .fc-desc{font-size:12px;color:#7a80a0;line-height:1.5;}
+  .timeline{margin:0 0 20px;border-left:2px solid #1e2235;padding-left:20px;}
+  .tl-item{position:relative;margin-bottom:20px;}
+  .tl-item:last-child{margin-bottom:0;}
+  .tl-dot{position:absolute;left:-26px;top:4px;width:10px;height:10px;border-radius:50%;background:#1e2235;border:2px solid #4a9eff;}
+  .tl-dot.done{background:#4caf50;border-color:#4caf50;}
+  .tl-dot.active{background:#a89ff0;border-color:#a89ff0;}
+  .tl-dot.pending{background:#1e2235;border-color:#5a6080;}
+  .tl-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;}
+  .tl-label.done{color:#4caf50;}
+  .tl-label.active{color:#a89ff0;}
+  .tl-label.pending{color:#5a6080;}
+  .tl-title{font-size:13px;font-weight:700;color:#e8eaf0;margin-bottom:2px;}
+  .tl-desc{font-size:12px;color:#7a80a0;}
+  .highlight{background:rgba(74,158,255,.07);border-left:3px solid #4a9eff;border-radius:0 8px 8px 0;padding:14px 18px;margin:20px 0;color:#a0c8f8;font-size:13px;}
+  .warn{background:rgba(255,170,0,.07);border-left:3px solid #ffaa00;border-radius:0 8px 8px 0;padding:14px 18px;margin:20px 0;color:#e0c070;font-size:13px;}
+  .faq-item{border:1px solid #1e2235;border-radius:10px;margin-bottom:10px;overflow:hidden;}
+  .faq-q{background:#12151f;padding:14px 18px;font-weight:700;font-size:13px;color:#e8eaf0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .faq-q:hover{background:#161926;}
+  .faq-q .arrow{color:#5a6080;font-size:11px;transition:transform .2s;}
+  .faq-q.open .arrow{transform:rotate(180deg);}
+  .faq-a{display:none;padding:14px 18px;font-size:13px;color:#7a80a0;line-height:1.6;border-top:1px solid #1e2235;}
+  .faq-a.open{display:block;}
+  .badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em;vertical-align:middle;margin-left:6px;}
+  .badge-new{background:rgba(124,111,224,.18);color:#a89ff0;}
+  .badge-free{background:rgba(76,175,80,.15);color:#4caf50;}
+  code{background:#1c2030;color:#cc80ff;padding:2px 7px;border-radius:4px;font-size:12px;font-family:'Consolas',monospace;}
+</style>
+</head>
+<body>
+
+<div class="tag tag-upcoming">Upcoming Feature</div>
+<h1>Free Alt Accounts — Coming Soon</h1>
+<div class="date">Announced March 11, 2025 &nbsp;·&nbsp; Expected: Late April 2025</div>
+
+<div class="hero-banner">
+  <div class="hero-icon">🎭</div>
+  <div class="hero-text">
+    <h2>Play Minecraft for free — no purchase required</h2>
+    <p>Sonar Client's next major update will let any user log in and play using a free alt account generated directly inside the launcher. No Microsoft account, no payment, no hassle.</p>
+  </div>
+</div>
+
+<p>
+  This has been the most requested feature since launch. Starting in the next update, every Sonar Client user will be able to create and use a free "alt" account — a valid Minecraft session that lets you join servers, play singleplayer, and use all launcher features without owning a copy of Minecraft.
+</p>
+
+<h2>What's included</h2>
+<div class="feature-grid">
+  <div class="feature-card">
+    <div class="fc-icon">🆓</div>
+    <div class="fc-title">Free alt accounts <span class="badge badge-free">Free</span></div>
+    <div class="fc-desc">Generate a working Minecraft session username instantly from inside the launcher. No account required.</div>
+  </div>
+  <div class="feature-card">
+    <div class="fc-icon">🔄</div>
+    <div class="fc-title">Alt switcher</div>
+    <div class="fc-desc">Save multiple alts and switch between them with one click. Perfect for testing mods or playing on different servers.</div>
+  </div>
+  <div class="feature-card">
+    <div class="fc-icon">🎮</div>
+    <div class="fc-title">Full launcher support</div>
+    <div class="fc-desc">Alts work with vanilla, Fabric, and all profile types — the same as a paid account inside Sonar Client.</div>
+  </div>
+  <div class="feature-card">
+    <div class="fc-icon">🔒</div>
+    <div class="fc-title">Premium accounts unchanged</div>
+    <div class="fc-desc">If you already own Minecraft and use Microsoft login, nothing changes. Alts are a separate optional feature.</div>
+  </div>
+</div>
+
+<div class="highlight">
+  <strong>Note:</strong> Free alt accounts work on servers that have <code>online-mode=false</code>. Premium (Microsoft) accounts are still required for online-mode servers like Hypixel.
+</div>
+
+<h2>Release timeline</h2>
+<div class="timeline">
+  <div class="tl-item">
+    <div class="tl-dot done"></div>
+    <div class="tl-label done">Completed</div>
+    <div class="tl-title">Sonar Client 1.0 launch</div>
+    <div class="tl-desc">Core launcher, Microsoft login, Fabric support, Modrinth integration.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot done"></div>
+    <div class="tl-label done">Completed</div>
+    <div class="tl-title">Login hotfix & stability patches</div>
+    <div class="tl-desc">Fabric login fix, auth_type correction, Java auto-install improvements.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot active"></div>
+    <div class="tl-label active">In Progress</div>
+    <div class="tl-title">Alt account system — development</div>
+    <div class="tl-desc">Backend session generator, alt manager UI, and switcher being built now.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot pending"></div>
+    <div class="tl-label pending">Upcoming · Est. Late April 2025</div>
+    <div class="tl-title">Version 1.1 — Free Alt Accounts</div>
+    <div class="tl-desc">Public release with free alt generation, alt switcher, and additional bug fixes.</div>
+  </div>
+</div>
+
+<div class="warn">
+  <strong>Estimated date:</strong> Late April 2025. Dates may shift depending on testing. Follow the news page for updates.
+</div>
+
+<h2>Frequently asked questions</h2>
+
+<div class="faq-item">
+  <div class="faq-q" onclick="toggle(this)">What exactly is a free alt account? <span class="arrow">▼</span></div>
+  <div class="faq-a">A free alt account is a Minecraft session with a chosen username that doesn't require a Microsoft account or a paid copy of Minecraft. Sonar Client generates a valid offline-mode session token locally, letting you launch and play the game freely.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q" onclick="toggle(this)">Can I play on any server with a free alt? <span class="arrow">▼</span></div>
+  <div class="faq-a">Free alts work on servers running in <code>online-mode=false</code> (also called "cracked" servers). Servers with <code>online-mode=true</code> — like Hypixel, Mineplex, or any server that verifies with Mojang — require a real paid Microsoft account. This is a Mojang restriction, not something Sonar Client controls.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q" onclick="toggle(this)">Will I lose my paid account if I use an alt? <span class="arrow">▼</span></div>
+  <div class="faq-a">No. Your Microsoft account login and saved credentials are completely separate. You can switch between your paid account and any alt at any time from the launcher's account switcher — they don't interfere with each other.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q" onclick="toggle(this)">How many alts can I create? <span class="arrow">▼</span></div>
+  <div class="faq-a">There's no set limit planned. You'll be able to save as many named alts as you want locally inside the launcher. We may introduce a soft limit in future if needed, but the initial release will be unlimited.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q" onclick="toggle(this)">Is this safe / will I get banned? <span class="arrow">▼</span></div>
+  <div class="faq-a">Free alts are for offline-mode servers which don't have Mojang account verification. There is no Mojang ban risk for using them on offline servers. However, individual server owners can ban usernames — always read a server's rules before playing.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q" onclick="toggle(this)">When exactly is version 1.1 releasing? <span class="arrow">▼</span></div>
+  <div class="faq-a">Our target is late April 2025. Development is in progress right now. If the timeline shifts, we'll post an update here. There's no exact date yet — we'd rather release it right than rush it.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q" onclick="toggle(this)">Do I need to reinstall Sonar Client for the update? <span class="arrow">▼</span></div>
+  <div class="faq-a">No. Sonar Client has a built-in auto-updater. When version 1.1 is released, you'll see an update prompt inside the launcher and can install it in one click. Your profiles, settings, and data will be preserved.</div>
+</div>
+
+<p style="margin-top:32px;color:#5a6080;font-size:12px;">More details will be shared as development progresses. Stay tuned! 🎉</p>
+
+<script>
+function toggle(el) {
+  el.classList.toggle('open');
+  var a = el.nextElementSibling;
+  a.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>

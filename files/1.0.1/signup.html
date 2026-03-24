@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Launcher — Create Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-darkest: #0d0f14;
+    --bg-dark: #13161e;
+    --bg-mid: #181c26;
+    --bg-panel: #1c2030;
+    --bg-card: #1f2435;
+    --bg-hover: #252a3a;
+    --border: #2a2f42;
+    --border-light: #333a52;
+    --accent-green: #4caf50;
+    --accent-green-bright: #5dcc62;
+    --accent-blue: #4a9eff;
+    --text-primary: #e8eaf0;
+    --text-secondary: #8a90a8;
+    --text-dim: #5a6080;
+  }
+
+  body {
+    font-family: 'Exo 2', sans-serif;
+    background: var(--bg-darkest);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bg-scene { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+  .stars {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 5% 8%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 18% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.2px 1.2px at 28% 68%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 42% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 56% 82%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 68% 45%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 18%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 72%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.2px 1.2px at 95% 32%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 12% 92%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.2px 1.2px at 58% 7%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 22% 78%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 88% 58%, rgba(255,255,255,0.4) 0%, transparent 100%);
+  }
+  .glow-blob { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+  .blob-blue  { width: 500px; height: 500px; background: rgba(74,158,255,0.07);  top: -100px; left: -100px; }
+  .blob-green { width: 400px; height: 400px; background: rgba(76,175,80,0.06);   bottom: -80px; right: -80px; }
+  .bg-blocks  { position: absolute; inset: 0; pointer-events: none; }
+  .bg-block   { position: absolute; border-radius: 4px; opacity: 0.05; animation: driftBlock linear infinite; }
+  @keyframes driftBlock { 0%{transform:translateY(110vh) rotate(0deg);opacity:0} 5%{opacity:0.05} 95%{opacity:0.05} 100%{transform:translateY(-20vh) rotate(360deg);opacity:0} }
+
+  /* CARD */
+  .card-wrap {
+    position: relative; z-index: 10;
+    width: 100%; max-width: 460px; padding: 20px;
+    animation: cardIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes cardIn { from{opacity:0;transform:translateY(24px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+  .logo-area { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .logo-icon { width: 60px; height: 60px; border-radius: 16px; background: var(--bg-panel); border: 1.5px solid var(--border-light); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(74,158,255,0.15); }
+  .logo-title { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+  .logo-sub { font-size: 12px; color: var(--text-secondary); letter-spacing: 0.05em; }
+
+  .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 32px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
+  .card-title { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .card-subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 26px; }
+
+  /* Two-col layout */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 7px; }
+
+  .input-wrap { position: relative; }
+  .input-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--text-dim); pointer-events: none; transition: color 0.15s; }
+
+  .form-input {
+    width: 100%; height: 44px;
+    background: var(--bg-mid); border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 0 14px 0 40px;
+    font-family: 'Exo 2', sans-serif; font-size: 13px; color: var(--text-primary);
+    outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .form-input::placeholder { color: var(--text-dim); }
+  .form-input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(74,158,255,0.1); }
+  .form-input.valid   { border-color: var(--accent-green); }
+  .form-input.invalid { border-color: #e05050; }
+
+  .eye-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-dim); padding: 4px; transition: color 0.15s; }
+  .eye-toggle:hover { color: var(--text-secondary); }
+
+  /* Password strength */
+  .pw-strength { margin-top: 6px; display: flex; gap: 4px; }
+  .pw-bar { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background 0.3s; }
+  .pw-bar.weak   { background: #e05050; }
+  .pw-bar.medium { background: #ff8c2a; }
+  .pw-bar.strong { background: var(--accent-green); }
+  .pw-hint { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+
+  /* Field hint */
+  .field-hint { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+  .field-hint.error { color: #f08080; }
+  .field-hint.ok    { color: var(--accent-green); }
+
+  .btn-primary {
+    width: 100%; height: 48px;
+    background: var(--accent-green); border: none; border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: #fff;
+    cursor: pointer; transition: all 0.15s;
+    box-shadow: 0 4px 16px rgba(76,175,80,0.3);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 6px;
+  }
+  .btn-primary:hover { background: var(--accent-green-bright); box-shadow: 0 4px 24px rgba(76,175,80,0.5); transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .alert { border-radius: 8px; padding: 10px 14px; font-size: 12px; margin-bottom: 18px; display: none; align-items: center; gap: 8px; }
+  .alert.error   { background: rgba(224,80,80,0.12); border: 1px solid rgba(224,80,80,0.3);  color: #f08080; }
+  .alert.success { background: rgba(76,175,80,0.12);  border: 1px solid rgba(76,175,80,0.3); color: #80cc80; }
+  .alert.show    { display: flex; }
+
+  .divider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 14px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-text { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .btn-microsoft {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.18s, border-color 0.18s, transform 0.1s;
+    margin-bottom: 18px;
+  }
+  .btn-microsoft:hover:not(:disabled) { background: var(--bg-hover); border-color: #4a9eff66; transform: translateY(-1px); }
+  .btn-microsoft:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  /* ── FREE / CRACKED NOTICE ── */
+  .free-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: rgba(74,158,255,0.07);
+    border: 1px solid rgba(74,158,255,0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  .free-notice svg { flex-shrink:0; color:var(--accent-blue); margin-top:1px; }
+  .free-notice strong { color: var(--accent-blue); }
+
+  .login-row { text-align: center; font-size: 12px; color: var(--text-secondary); margin-top: 20px; }
+  .login-row a { color: var(--accent-blue); text-decoration: none; font-weight: 600; }
+  .login-row a:hover { opacity: 0.8; }
+
+  /* Avatar preview */
+  .avatar-preview {
+    width: 60px; height: 60px; border-radius: 10px;
+    border: 1.5px solid var(--border);
+    overflow: hidden; background: var(--bg-mid);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+  .username-row { display: flex; gap: 12px; align-items: flex-end; }
+  .username-row .form-group { flex: 1; margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<div class="bg-scene">
+  <div class="stars"></div>
+  <div class="glow-blob blob-blue"></div>
+  <div class="glow-blob blob-green"></div>
+  <div class="bg-blocks" id="bgBlocks"></div>
+</div>
+
+<div class="card-wrap">
+  <div class="logo-area">
+    <div class="logo-icon">
+      <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="18" fill="#1e2640" stroke="#3a4060" stroke-width="1.5"/>
+        <path d="M10 20 Q20 8 30 20 Q20 32 10 20Z" fill="#4a9eff" opacity="0.9"/>
+        <circle cx="20" cy="20" r="5" fill="#fff" opacity="0.95"/>
+      </svg>
+    </div>
+    <div class="logo-title">Launcher</div>
+    <div class="logo-sub">Create your account</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Create Account</div>
+    <div class="card-subtitle">Join millions of players. Takes less than a minute.</div>
+
+    <div class="alert error" id="alertBox">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="alertMsg"></span>
+    </div>
+
+    <!-- Username -->
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <div class="input-wrap">
+        <input class="form-input" id="username" type="text" placeholder="YourUsername" maxlength="20" oninput="onUsernameChange(this)" autocomplete="username"/>
+        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="field-hint" id="usernameHint">3–20 characters, letters, numbers and underscores only</div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <input class="form-input" id="password" type="password" placeholder="Create password" oninput="checkStrength(this.value)" style="padding-right:40px;" autocomplete="new-password"/>
+          <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <button class="eye-toggle" type="button" onclick="togglePw('password', this)" tabindex="-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="pw-strength">
+          <div class="pw-bar" id="bar1"></div>
+          <div class="pw-bar" id="bar2"></div>
+          <div class="pw-bar" id="bar3"></div>
+          <div class="pw-bar" id="bar4"></div>
+        </div>
+        <div class="pw-hint" id="pwHint">Minimum 6 characters</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <div class="input-wrap">
+          <input class="form-input" id="confirmPw" type="password" placeholder="Repeat password" oninput="checkConfirm()" style="padding-right:40px;" autocomplete="new-password"/>
+          <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <button class="eye-toggle" type="button" onclick="togglePw('confirmPw', this)" tabindex="-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="field-hint" id="confirmHint"></div>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="signupBtn" onclick="handleSignup()">
+      <div class="spinner" id="spinner"></div>
+      <span id="btnText">Create Account</span>
+    </button>
+
+    <div class="divider-row">
+      <span class="divider-line"></span>
+      <span class="divider-text">or</span>
+      <span class="divider-line"></span>
+    </div>
+
+    <button class="btn-microsoft" id="msBtn" onclick="handleMicrosoftSignup()">
+      <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+        <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+        <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+      </svg>
+      <span id="msBtnText">Sign up with Microsoft</span>
+      <div class="spinner" id="msSpinner"></div>
+    </button>
+
+    <!-- FREE / CRACKED NOTICE -->
+    <div class="free-notice">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>No Microsoft account? <strong>This launcher is completely free.</strong> Create an account with just a username and password — you'll play in offline / cracked mode without needing to own Minecraft.</span>
+    </div>
+
+    <div class="login-row">
+      Already have an account? <a href="login.html">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp }  from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDrfqJBYomo0psMToQmR5rBKz56B76UIac",
+    authDomain: "launcher-c813d.firebaseapp.com",
+    projectId: "launcher-c813d",
+    storageBucket: "launcher-c813d.firebasestorage.app",
+    messagingSenderId: "71513819000",
+    appId: "1:71513819000:web:43bbcf97745c459ae42a8d",
+    measurementId: "G-RLH09R9NRE",
+    databaseURL: "https://launcher-c813d-default-rtdb.europe-west1.firebasedatabase.app"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getDatabase(app);
+
+  window.handleSignup = async function() {
+    const username  = document.getElementById('username').value.trim();
+    const password  = document.getElementById('password').value;
+    const confirmPw = document.getElementById('confirmPw').value;
+    const btn       = document.getElementById('signupBtn');
+    const spinner   = document.getElementById('spinner');
+    const btnText   = document.getElementById('btnText');
+
+    hideAlert();
+
+    // Validation
+    if (!username || !password || !confirmPw) {
+      showAlert('Please fill in all fields.'); return;
+    }
+    if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+      showAlert('Username must be 3–20 characters (letters, numbers, underscores only).'); return;
+    }
+    if (password.length < 6) {
+      showAlert('Password must be at least 6 characters.'); return;
+    }
+    if (password !== confirmPw) {
+      showAlert('Passwords do not match.'); return;
+    }
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnText.textContent = 'Creating account...';
+
+    try {
+      // Check if username taken
+      const existing = await get(ref(db, `Users/${username}`));
+      if (existing.exists()) {
+        showAlert('That username is already taken. Try another.'); return;
+      }
+
+      const now = new Date().toISOString();
+
+      // Write user structure to Firebase
+      await set(ref(db, `Users/${username}`), {
+        Username: username,
+        Password: password,
+        SkinURL:  `https://api.dicebear.com/9.x/adventurer/svg?seed=${username}`,
+        Status:   "Online",
+        Lastseen: now,
+        Chat:     {},
+        Friends:  {}
+      });
+
+      // Success
+      // Persist login
+      localStorage.setItem('launcher_user', username);
+      sessionStorage.setItem('launcher_user', username);
+      btnText.textContent = 'Account created!';
+      btn.style.background = 'var(--accent-blue)';
+      spinner.style.display = 'none';
+
+      setTimeout(() => { window.location.href = 'launcher.html'; }, 900);
+
+    } catch (err) {
+      console.error(err);
+      showAlert('Failed to create account. Check your connection and try again.');
+    } finally {
+      if (btn.disabled && btnText.textContent === 'Creating account...') {
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.textContent = 'Create Account';
+      }
+    }
+  };
+
+  function showAlert(msg) {
+    document.getElementById('alertMsg').textContent = msg;
+    document.getElementById('alertBox').classList.add('show');
+    const btn = document.getElementById('signupBtn');
+    btn.disabled = false;
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('btnText').textContent = 'Create Account';
+    btn.style.background = '';
+  }
+
+  function hideAlert() { document.getElementById('alertBox').classList.remove('show'); }
+
+  // Username validation feedback
+  window.onUsernameChange = function(inp) {
+    const val = inp.value.trim();
+    const hint = document.getElementById('usernameHint');
+    if (!val) { hint.className = 'field-hint'; hint.textContent = '3–20 characters, letters, numbers and underscores only'; return; }
+    if (!/^[a-zA-Z0-9_]{3,20}$/.test(val)) {
+      hint.className = 'field-hint error'; hint.textContent = 'Only letters, numbers, underscores (3–20 chars)'; return;
+    }
+    hint.className = 'field-hint ok'; hint.textContent = '✓ Looks good';
+  };
+
+  window.checkStrength = function(pw) {
+    const bars = ['bar1','bar2','bar3','bar4'];
+    const hint = document.getElementById('pwHint');
+    bars.forEach(b => { document.getElementById(b).className = 'pw-bar'; });
+
+    if (!pw) { hint.textContent = 'Minimum 6 characters'; return; }
+    let score = 0;
+    if (pw.length >= 6)  score++;
+    if (pw.length >= 10) score++;
+    if (/[A-Z]/.test(pw) && /[0-9]/.test(pw)) score++;
+    if (/[^a-zA-Z0-9]/.test(pw)) score++;
+
+    const cls  = score <= 1 ? 'weak' : score <= 2 ? 'medium' : 'strong';
+    const label = score <= 1 ? 'Weak' : score <= 2 ? 'Fair' : score === 3 ? 'Good' : 'Strong';
+    for (let i = 0; i < score; i++) document.getElementById(bars[i]).classList.add(cls);
+    hint.textContent = label + ' password';
+    hint.style.color = cls === 'weak' ? '#f08080' : cls === 'medium' ? '#ff8c2a' : 'var(--accent-green)';
+    checkConfirm();
+  };
+
+  window.checkConfirm = function() {
+    const pw  = document.getElementById('password').value;
+    const cpw = document.getElementById('confirmPw').value;
+    const hint = document.getElementById('confirmHint');
+    if (!cpw) { hint.textContent = ''; return; }
+    if (pw === cpw) { hint.className = 'field-hint ok'; hint.textContent = '✓ Passwords match'; }
+    else            { hint.className = 'field-hint error'; hint.textContent = 'Passwords do not match'; }
+  };
+
+  window.togglePw = function(id, btn) {
+    const inp = document.getElementById(id);
+    const hidden = inp.type === 'password';
+    inp.type = hidden ? 'text' : 'password';
+    btn.innerHTML = hidden
+      ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+      : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+  };
+
+  // Enter key
+  document.getElementById('confirmPw').addEventListener('keydown', e => { if (e.key === 'Enter') handleSignup(); });
+
+  // ── Microsoft Signup ─────────────────────────────────────
+  window.handleMicrosoftSignup = async function() {
+    const btn     = document.getElementById('msBtn');
+    const btnText = document.getElementById('msBtnText');
+    const spinner = document.getElementById('msSpinner');
+
+    btn.disabled = true;
+    btnText.textContent = 'Opening Microsoft sign-in…';
+    spinner.style.display = 'block';
+    hideAlert();
+
+    try {
+      if (!window.pywebview) {
+        showAlert('pywebview API not available. Make sure you are running inside the launcher.');
+        return;
+      }
+      const res = JSON.parse(await window.pywebview.api.microsoft_login());
+      if (!res.ok) {
+        showAlert(res.error || 'Microsoft sign-in failed.');
+        return;
+      }
+
+      // Save to Firebase
+      try {
+        const { initializeApp }  = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js");
+        const { getDatabase, ref, get, set, update } = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js");
+        const firebaseConfig = {
+          apiKey: "AIzaSyDrfqJBYomo0psMToQmR5rBKz56B76UIac",
+          authDomain: "launcher-c813d.firebaseapp.com",
+          projectId: "launcher-c813d",
+          storageBucket: "launcher-c813d.firebasestorage.app",
+          messagingSenderId: "71513819000",
+          appId: "1:71513819000:web:43bbcf97745c459ae42a8d",
+          databaseURL: "https://launcher-c813d-default-rtdb.europe-west1.firebasedatabase.app"
+        };
+        const app = initializeApp(firebaseConfig, "msa-signup");
+        const db  = getDatabase(app);
+        const now = new Date().toISOString();
+        const snap = await get(ref(db, `Users/${res.username}`));
+        if (!snap.exists()) {
+          await set(ref(db, `Users/${res.username}`), {
+            Username: res.username,
+            Password: "__MSA__",
+            UUID:     res.uuid,
+            AuthType: "msa",
+            SkinURL:  `https://crafatar.com/avatars/${res.uuid}?size=64&overlay`,
+            Status:   "Online",
+            Lastseen: now,
+            Chat:     {},
+            Friends:  {}
+          });
+        } else {
+          await update(ref(db, `Users/${res.username}`), { Lastseen: now, Status: "Online", UUID: res.uuid });
+        }
+      } catch (fbErr) {
+        console.warn("Firebase MSA save failed:", fbErr);
+      }
+
+      localStorage.setItem('launcher_user', res.username);
+      sessionStorage.setItem('launcher_user', res.username);
+      localStorage.setItem('launcher_auth_type', 'msa');
+
+      btnText.textContent = `Welcome, ${res.username}!`;
+      btn.style.borderColor = 'var(--accent-green)';
+      spinner.style.display = 'none';
+
+      setTimeout(() => { window.location.href = 'launcher.html'; }, 800);
+
+    } catch (err) {
+      console.error(err);
+      showAlert('Unexpected error during Microsoft sign-in.');
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Sign up with Microsoft';
+    }
+  };
+</script>
+
+<!-- Floating blocks -->
+<script>
+  const container = document.getElementById('bgBlocks');
+  const colors = ['#4a9eff','#4caf50','#ff8c2a','#cc80ff','#40e0ff'];
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    el.className = 'bg-block';
+    const size = 20 + Math.random() * 60;
+    el.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${12 + Math.random()*20}s;
+      animation-delay:${-Math.random()*25}s;
+      border-radius:${Math.random()>0.5?'4px':'50%'};
+    `;
+    container.appendChild(el);
+  }
+</script>
+</body>
+</html>
